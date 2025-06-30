@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Sequelize } = require('sequelize'); // Importa Sequelize con S mayúscula
+const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -7,9 +7,16 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    dialect: 'mysql', // Especifica el dialecto de la base de datos
-    logging: false // Opcional: para no ver los logs de SQL en consola
+    port: process.env.DB_PORT || 5432,
+    dialect: 'postgres',
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
   }
 );
 
-module.exports = sequelize; // Exporta la instancia de Sequelize
+module.exports = sequelize;
